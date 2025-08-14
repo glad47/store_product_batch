@@ -1,0 +1,49 @@
+<odoo>
+    <record id="view_store_batch_form" model="ir.ui.view">
+        <field name="name">store.batch.form</field>
+        <field name="model">store.batch</field>
+        <field name="arch" type="xml">
+            <form string="Store Batch">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="product_id"/>
+                        <field name="location_id"/>
+                    </group>
+                    <group>
+                        <field name="start_time"/>
+                        <field name="end_time"/>
+                        <field name="current_qty"/>
+                        <field name="approx_qty_left"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_store_batch_tree" model="ir.ui.view">
+        <field name="name">store.batch.tree</field>
+        <field name="model">store.batch</field>
+        <field name="arch" type="xml">
+            <tree string="Store Batches">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="location_id"/>
+                <field name="current_qty"/>
+                <field name="approx_qty_left"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_store_batch" model="ir.actions.act_window">
+        <field name="name">Store Batches</field>
+        <field name="res_model">store.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_store_root" name="Store Product Tracker"/>
+    <menuitem id="menu_store_location" name="Locations" parent="menu_store_root" action="action_store_location"/>
+    <menuitem id="menu_store_batch" name="Batches" parent="menu_store_root" action="action_store_batch"/>
+</odoo>
