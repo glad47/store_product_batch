@@ -5,7 +5,7 @@
     'summary': 'Track store batches by location with barcode scanning',
     'author': 'gladdema',
     'website': 'https://gladdema.com',
-    'depends': ['base', 'product'],
+    'depends': ['base', 'product', 'stock'],
     'data': [
         'security/ir.model.access.csv',
         'views/store_location_views.xml',

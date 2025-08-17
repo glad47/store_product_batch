@@ -1,0 +1,185 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-13 18:36+0000\n"
+"PO-Revision-Date: 2025-08-17 10:00+0000\n"
+"Last-Translator: Wil Odoo, 2025\n"
+"Language-Team: Arabic (https://app.transifex.com/odoo/teams/41243/ar/)\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+
+#. module: store_product_batch
+#: model:ir.ui.menu,name:store_product_batch.menu_store_root
+msgid "Store Product Tracker"
+msgstr "متابعة الجناديل"
+
+
+#. module: store_product_batch
+#: model:ir.ui.menu,name:store_product_batch.menu_store_location
+msgid "Locations"
+msgstr "المواقع"
+
+
+#. module: store_product_batch
+#: model:ir.ui.menu,name:store_product_batch.menu_store_batch
+msgid "Batches"
+msgstr "الجناديل"
+
+
+
+#. module: store_product_batch
+#: model:ir.ui.view,arch_db:store_product_batch.view_store_batch_form
+msgid "Store Batch"
+msgstr "الجندول"
+
+
+#. module: store_product_batch
+#: model:ir.ui.view,arch_db:store_product_batch.view_store_batch_tree
+msgid "Store Batches"
+msgstr "الجناديل"
+
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Inactive Batches"
+msgstr "الجناديل غير النشطة"
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Active Batches"
+msgstr "الجناديل النشطة"
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Started Today"
+msgstr "بدأت اليوم"
+
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Expired Batches"
+msgstr "الجناديل المنتهية"
+
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Ongoing Batches"
+msgstr "الجناديل الجارية"
+
+
+
+
+
+
+
+#. module: store_product_batch
+#: model:ir.actions.act_window,name:store_product_batch.action_store_batch
+msgid "Store Batches"
+msgstr "الجناديل"
+
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__name
+msgid "Batch Name"
+msgstr "اسم الجندول"
+
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__product_id
+msgid "Product"
+msgstr "المنتج"
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__location_id
+msgid "Location"
+msgstr "الموقع"
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__start_time
+msgid "Start Time"
+msgstr "وقت البدء"
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__end_time
+msgid "End Time"
+msgstr "وقت الانتهاء"
+
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__current_qty
+msgid "Initial Quantity"
+msgstr "الكمية المبدئية"
+
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__current_qty
+msgid "Cuurent Quantity"
+msgstr "الكمية الحالية"
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__consumed_qty
+msgid "Consumed Quantity"
+msgstr "الكمية المستهلكة"
+
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__active
+msgid "Active"
+msgstr "نشط"
+
+
+
+#. module: store_product_batch
+#: model:ir.ui.view,arch_db:store_product_batch.view_store_location_tree
+msgid "Store Locations"
+msgstr "مواقع التخزين"
+
+
+#. module: store_product_batch
+#: model:ir.actions.act_window,name:store_product_batch.action_store_location
+msgid "Store Locations"
+msgstr "مواقع التخزين"
+
+
+#. module: store_product_batch
+#: model:ir.model,name:store_product_batch.field_store_batch
+msgid "Store Batch in Store"
+msgstr "دفعة التخزين في المتجر"
+
+#. module: store_product_batch
+#: model:ir.model,name:store_product_batch.field_store_location
+msgid "Store Location"
+msgstr "موقع التخزين"
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_location__name
+msgid "Location Name"
+msgstr "اسم الموقع"
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_location__code
+msgid "Reference"
+msgstr "الرقم المرجعي"
+
+#. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_location__batch_ids
+msgid "Store Batches"
+msgstr "دفعات التخزين"
+
+
+
+
+
+#. module: store_product_batch
+#. odoo-python
+#: code:addons/store_product_batch/models/store_batch.py:0
+#, python-format
+msgid "You cannot reactivate a store batch that has already ended."
+msgstr "لا يمكنك إعادة تنشيط جندول انتهى بالفعل."
+
+

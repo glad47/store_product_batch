@@ -17,9 +17,3 @@ class StoreLocation(models.Model):
 
     batch_ids = fields.One2many('store.batch', 'location_id', string="Store Batches")
 
-    # @api.model
-    # def create(self, vals):
-    #     if not vals.get('code'):
-    #         vals['code'] = self.env['ir.sequence'].next_by_code('store.location.reference')
-    #     return super(StoreLocation, self).create(vals)
-
