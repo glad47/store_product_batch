@@ -11,6 +11,8 @@
         'views/store_location_views.xml',
         'views/store_batch_views.xml',
         'views/store_batch_sequence.xml',
+        'views/store_batch_report_view.xml',
+        'report/report_store_batch_template.xml',
     ],
     'installable': True,
     'application': True,

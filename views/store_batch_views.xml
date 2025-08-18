@@ -34,7 +34,7 @@
                 <field name="initial_qty" width="150"/>
                 <field name="current_qty" width="150"/>
                 <field name="consumed_qty" width="150"/>
-                
+                <field name="earned_amount" width="150"/>
                 <field name="active" width="80"/>
             </tree>
 
@@ -79,4 +79,5 @@
     <menuitem id="menu_store_root" name="Store Product Tracker"/>
     <menuitem id="menu_store_location" name="Locations" parent="menu_store_root" action="action_store_location"/>
     <menuitem id="menu_store_batch" name="Batches" parent="menu_store_root" action="action_store_batch"/>
+    
 </odoo>
