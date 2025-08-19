@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_store_location_user,access.store.location.user,model_store_location,,1,1,1,1
-access_store_batch_user,access.store.batch.user,model_store_batch,,1,1,1,1
+access_store_location_user,access.store.location.user,model_store_location,base.group_user,1,1,1,1
+access_store_batch_user,access.store.batch.user,model_store_batch,base.group_user,1,1,1,1
+access_store_branch_user,access.store.branch.user,model_store_branch,base.group_user,1,1,1,1

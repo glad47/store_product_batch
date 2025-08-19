@@ -1,0 +1,10 @@
+<odoo>
+    <menuitem id="menu_store_root" name="Store Product Tracker"/>
+    <menuitem id="menu_store_branch"
+          name="Branches"
+          parent="menu_store_root"
+          action="action_store_branch_view"/>
+    <menuitem id="menu_store_location" name="Locations" parent="menu_store_root" action="action_store_location"/>
+    <menuitem id="menu_store_batch" name="Batches" parent="menu_store_root" action="action_store_batch"/>
+    <menuitem id="menu_store_root_web_report" name="Store Batch Report" parent="menu_store_root" action="action_store_batch_web_report"/>
+</odoo>

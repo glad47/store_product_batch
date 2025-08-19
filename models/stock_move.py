@@ -6,8 +6,6 @@ class StockMove(models.Model):
     def _action_done(self):
         res = super()._action_done()
         affected_products = self.mapped('product_id')
-        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        print(affected_products)
         self.env['store.batch'].search([
             ('product_id', 'in', affected_products.ids),
             ('active', '=', True)

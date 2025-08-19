@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
   <data>
-
     <!-- Web Page Report Action -->
     <record id="action_store_batch_web_report" model="ir.actions.report">
         <field name="name">Store Batch Report</field>
@@ -11,16 +10,6 @@
         <field name="report_file">store_product_batch.report_store_batch_template</field>
         <field name="binding_type">report</field>
     </record>
-
-
-
-    <!-- Menu Item -->
-    <menuitem id="menu_store_root_web_report"
-              name="Store Batch Report"
-              parent="menu_store_root"
-              action="action_store_batch_web_report"/>
-    
-
   </data>
 </odoo>
 

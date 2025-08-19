@@ -43,6 +43,10 @@ msgstr "الجندول"
 msgid "Store Batches"
 msgstr "الجناديل"
 
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "All Batches"
+msgstr "كل الجناديل"
 
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
@@ -70,6 +74,25 @@ msgstr "الجناديل المنتهية"
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
 msgid "Ongoing Batches"
 msgstr "الجناديل الجارية"
+
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Location"
+msgstr "الموقع"
+
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Product"
+msgstr "المنتج"
+
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
+msgid "Status"
+msgstr "الحالة"
+
 
 
 
@@ -181,12 +204,7 @@ msgstr "دفعات التخزين"
 
 
 
-#. module: store_product_batch
-#. odoo-python
-#: code:addons/store_product_batch/models/store_batch.py:0
-#, python-format
-msgid "You cannot reactivate a store batch that has already ended."
-msgstr "لا يمكنك إعادة تنشيط جندول انتهى بالفعل."
+
 
 
 #. module: store_product_batch
@@ -196,4 +214,11 @@ msgstr "لا يمكنك إعادة تنشيط جندول انتهى بالفعل
 msgid "You cannot create a batch that is not active."
 msgstr "لا يمكنك إنشاء جندول غير نشط."
 
+
+#. module: store_product_batch
+#. odoo-python
+#: code:addons/store_product_batch/models/store_batch.py:0
+#, python-format
+msgid "You cannot reactivate a store batch that has already ended."
+msgstr "لا يمكنك إعادة تنشيط جندول انتهى بالفعل."
 

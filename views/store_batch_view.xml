@@ -45,26 +45,40 @@
         <field name="name">store.batch.search</field>
         <field name="model">store.batch</field>
         <field name="arch" type="xml">
-            <search>
+            <search string="Batch Filters">
+                <!-- Searchable Fields -->
                 <field name="name"/>
                 <field name="product_id"/>
                 <field name="location_id"/>
-                <!-- Active/Inactive Filters -->
-                <filter string="Active Batches" name="active" domain="[('active', '=', True)]" context="{'default_active': True}"/>
+
+                <!-- Status Filters -->
+                <filter string="All Batches" name="all_batches" domain="['|', ('active', '=', True), ('active', '=', False)]" context="{'default_all_batches': True}"/>
+                <filter string="Active Batches" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Inactive Batches" name="inactive" domain="[('active', '=', False)]"/>
+                
 
                 <!-- Time-Based Filters -->
-                <filter string="Started Today" name="today" domain="[('start_time', '&gt;=',  context_today())]"/>
-
-               
+                <filter string="Started Today" name="today"
+                    domain="[
+                            '|', ('active', '=', False) , ('active', '=', True),
+                            ('start_time', '&gt;=', context_today())
+                        ]"/>
                 <filter string="Expired Batches" name="expired"
-                     domain="[('end_time', '&gt;=', context_today())]"/>
+                        domain="[('active', '=', False), ('end_time', '&lt;=', context_today())]"/>
+                <filter string="Ongoing Batches" name="ongoing"
+                        domain="[('active', '=', True), ('start_time', '&lt;=', context_today())]"/>
 
-                <filter string="Ongoing Batches" name="ongoing" domain="[('start_time', '&lt;=', (context_today())), ('end_time', '&gt;=', (context_today()))]"/>
 
-
-
+                <!-- Group By Section -->
+                <group expand="0" string="Group By">
+                    <filter string="Location" name="group_location" domain="['|', ('active', '=', True), ('active', '=', False)]" context="{'group_by': 'location_id'}"/>
+                    <filter string="Product" name="group_product" domain="[]" context="{'group_by': 'product_id'}"/>
+                    <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'active'}"/>
+                    <!-- <filter string="Start Date" name="group_start" domain="[]" context="{'group_by': 'start_time:day'}"/>
+                    <filter string="End Date" name="group_end" domain="[]" context="{'group_by': 'end_time:day'}"/> -->
+                </group>
             </search>
+
         </field>
     </record>
 
@@ -73,11 +87,8 @@
         <field name="name">Store Batches</field>
         <field name="res_model">store.batch</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'search_default_active': 1}</field>
+        <field name="context">{'search_default_all_batches': 1}</field>
     </record>
 
-    <menuitem id="menu_store_root" name="Store Product Tracker"/>
-    <menuitem id="menu_store_location" name="Locations" parent="menu_store_root" action="action_store_location"/>
-    <menuitem id="menu_store_batch" name="Batches" parent="menu_store_root" action="action_store_batch"/>
-    
+   
 </odoo>

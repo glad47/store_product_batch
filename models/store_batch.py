@@ -93,6 +93,6 @@ class StoreBatch(models.Model):
     def _check_reactivation(self):
         for rec in self:
             if rec.active and rec.end_time:
-                raise ValidationError(_("You cannot reactivate a batch that has already ended."))
+                raise ValidationError(_("You cannot reactivate a store batch that has already ended."))
 
 
