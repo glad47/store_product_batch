@@ -18,11 +18,11 @@
         'report/report_store_batch_template.xml',
     ],
     'assets': {
-        'store_product_batch.assets': [
-            'store_product_batch/static/src/js/GlobalHeaderButton.js',
-            'store_product_batch/static/src/xml/GlobalHeaderButton.xml',
-        ],
-    },
+        'web.assets_backend': [
+            '/store_product_batch/static/src/js/tree_button.js',
+            '/store_product_batch/static/src/xml/tree_button.xml',
+        ]
+},
 
     'installable': True,
     'application': True,

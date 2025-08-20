@@ -161,13 +161,9 @@ class StoreBatch(models.Model):
 
     def action_refresh_batches_info(self):
         self.run_batch_consumption_tracker()
-        print("i am here")
         return {
-            'type': 'ir.actions.act_window',
-            'name': 'Store Batches',
-            'res_model': 'store.batch',
-            'view_mode': 'tree,form',
-            'target': 'current',
+            'type': 'ir.actions.client',
+            'tag': 'reload',
         }
 
 

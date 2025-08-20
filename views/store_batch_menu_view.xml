@@ -8,9 +8,9 @@
     <menuitem id="menu_store_batch" name="Batches" parent="menu_store_root" action="action_store_batch"/>
     <menuitem id="menu_store_root_web_report" name="Store Batch Report" parent="menu_store_root" action="action_store_batch_web_report"/>
 
-    <menuitem id="menu_run_batch_tracker"
+    <!-- <menuitem id="menu_run_batch_tracker"
           name="Refresh Batches Info"
           parent="menu_store_root"
-          action="action_run_batch_tracker_global"/>
+          action="action_run_batch_tracker_global"/> -->
 
 </odoo>
