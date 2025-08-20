@@ -18,41 +18,122 @@ class StoreBatch(models.Model):
         readonly=True
     )
     end_time = fields.Datetime(string="End Time", readonly=True)
-    initial_qty = fields.Float(string="Initial Quantity", readonly=True)
-    current_qty = fields.Float(string="Current Quantity", readonly=True)
-    consumed_qty = fields.Float(string="Consumed Quantity", compute="_compute_consumed_qty", store=True)
-    earned_amount = fields.Float(string="Earned Amount", compute="_compute_earned_amount", store=True)
+    consumed_qty = fields.Float(string="Consumed Quantity", store=True)
+    earned_amount = fields.Float(string="Earned Amount", store=True)
     active = fields.Boolean(string="Active", default=True, required=True)
 
+     # Add this field
+    processed_order_ids = fields.Many2many(
+        'pos.order',
+        'store_batch_pos_order_rel',  # relation table name
+        'batch_id',
+        'order_id',
+        string='Processed Orders'
+    )
 
+    
+    @api.model
+    def run_batch_consumption_tracker(self):
+        print("**************run_batch_consumption_tracker****************")
+        active_batches = self.search([('active', '=', True)])
+        for batch in active_batches:
+            location = batch.location_id
+            branch = location.branch_id
+
+            if not branch or not location:
+                continue  # Skip if location or branch is missing
+
+            sessions = branch.pos_session_ids
+            start_time = batch.start_time
+            product = batch.product_id
+
+            relevant_orders = self.env['pos.order'].search([
+                ('session_id', 'in', sessions.ids),
+                ('date_order', '>=', start_time),
+                ('state', '=', 'paid'),
+                ('id', 'not in', batch.processed_order_ids.ids),
+            ])
+
+            consumed = 0.0
+            earned = 0.0
+            newly_processed_orders = []
+
+            for order in relevant_orders:
+                for line in order.lines:
+                    if line.product_id == product:
+                        consumed += line.qty
+                        earned += line.price_subtotal
+                        newly_processed_orders.append(order.id)
+
+            # Update batch totals
+            batch.consumed_qty += consumed
+            batch.earned_amount += earned
+
+            # Mark orders as processed
+            if newly_processed_orders:
+                batch.processed_order_ids = [(4, oid) for oid in newly_processed_orders]
+    
 
     @api.model
     def create(self, vals):
         location_id = vals.get('location_id')
         product_id = vals.get('product_id')
         active = vals.get('active')
+
         if not active:
             raise ValidationError(_("You cannot create a batch that is not active."))
 
         if location_id and product_id:
-            product = self.env['product.product'].browse(product_id)
-            on_hand_qty = product.qty_available
-            vals['initial_qty'] = on_hand_qty
-            vals['current_qty'] = on_hand_qty
-            self.search([
+            location = self.env['store.location'].browse(location_id)
+            branch_id = location.branch_id.id
+            vals['consumed_qty'] = 0
+            vals['earned_amount'] = 0
+            # Deactivate conflicting batches in the same branch
+            conflicting_batches = self.search([
+                ('active', '=', True),
+                ('location_id.branch_id', '=', branch_id),
                 '|',
                 ('location_id', '=', location_id),
                 ('product_id', '=', product_id),
-                ('active', '=', True)
-            ]).write({'active': False})
+            ])
+            conflicting_batches.write({'active': False})
+
         return super(StoreBatch, self).create(vals)
+    
+    
+   
 
     def write(self, vals):
+
+        if self.env.context.get('skip_conflict_check'):
+            return super(StoreBatch, self).write(vals)
+    
+        location_id = vals.get('location_id')
+        product_id = vals.get('product_id')
+
         # If 'active' is being set to False and end_time is not already set
         if 'active' in vals and vals['active'] is False:
             for record in self:
                 if not record.end_time:
                     vals['end_time'] = datetime.now()
+
+        location = self.env['store.location'].browse(location_id)
+        branch_id = location.branch_id.id
+
+        # Deactivate other conflicting batches in the same branch
+        conflicting_batches = self.search([
+            ('id', '!=', self.id),
+            ('active', '=', True),
+            ('location_id.branch_id', '=', branch_id),
+            '|',
+            ('location_id', '=', location_id),
+            ('product_id', '=', product_id),
+        ])
+        conflicting_batches.with_context(skip_conflict_check=True).write({
+            'active': False,
+            'end_time': datetime.now()
+        })
+                 
         return super(StoreBatch, self).write(vals)
 
 
@@ -64,28 +145,8 @@ class StoreBatch(models.Model):
             if batch.active:
                 batch.consumed_qty = batch.initial_qty - batch.current_qty
 
-
-    @api.depends('consumed_qty', 'active')
-    def _compute_earned_amount(self):
-        for batch in self:
-            if batch.active and batch.product_id:
-                product = self.env['product.product'].browse(batch.product_id.id)
-                batch.earned_amount = batch.consumed_qty * product.lst_price
         
 
-
-
-    def update_current_qty(self):       
-        for batch in self:
-            print(batch.product_id)
-            product = self.env['product.product'].browse(batch.product_id.id)
-            on_hand_qty = product.qty_available
-            print("update_current_qty   on_hand_qty")
-            print(on_hand_qty)
-            # quants = self.env['stock.quant'].search([
-            #     ('product_id', '=', batch.product_id.id)
-            # ])
-            batch.current_qty = on_hand_qty
         
 
 
@@ -94,5 +155,20 @@ class StoreBatch(models.Model):
         for rec in self:
             if rec.active and rec.end_time:
                 raise ValidationError(_("You cannot reactivate a store batch that has already ended."))
+
+
+    
+
+    def action_refresh_batches_info(self):
+        self.run_batch_consumption_tracker()
+        print("i am here")
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Store Batches',
+            'res_model': 'store.batch',
+            'view_mode': 'tree,form',
+            'target': 'current',
+        }
+
 
 

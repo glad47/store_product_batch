@@ -33,6 +33,11 @@
         <field name="name">Store Locations</field>
         <field name="res_model">store.location</field>
         <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create and manage your store locations here.
+                </p>
+        </field>
     </record>
 
 

@@ -13,6 +13,12 @@ class StoreBranch(models.Model):
     pos_session_ids = fields.One2many('pos.session', 'branch_id', string='POS Sessions')
     location_ids = fields.One2many('store.location', 'branch_id', string='Store Locations')
 
+    processed_order_ids = fields.Many2many(
+        'pos.order',
+        string="Processed Orders",
+        help="Orders already counted for this batch"
+    )
+
 
     def unlink(self):
         for record in self:

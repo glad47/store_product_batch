@@ -1,0 +1,18 @@
+<!-- store_product_batch/static/src/xml/GlobalHeaderButton.xml -->
+<templates xml:space="preserve">
+  <t t-name="store_product_batch.GlobalHeaderButton" owl="1">
+    <button class="btn btn-primary" t-on-click="onClick">
+      <i class="fa fa-refresh"/> Refresh Batches
+    </button>
+  </t>
+
+    <t t-inherit="store_product_batch.Chrome" t-inherit-mode="extension">
+
+    <xpath expr="//TicketButton" position="before">
+
+      <GlobalHeaderButton />
+
+    </xpath>
+
+  </t>
+</templates>
