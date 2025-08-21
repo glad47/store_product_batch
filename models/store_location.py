@@ -17,3 +17,7 @@ class StoreLocation(models.Model):
 
     batch_ids = fields.One2many('store.batch', 'location_id', string="Store Batches")
     branch_id = fields.Many2one('store.branch', string="Branch")
+
+
+
+    

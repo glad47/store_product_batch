@@ -15,7 +15,8 @@ class StoreBatch(models.Model):
                         required=True,
                         default=lambda self: self.env['ir.sequence'].next_by_code('store.batch.name'))
     product_id = fields.Many2one('product.product', string="Product", required=True)
-    location_id = fields.Many2one('store.location', string="Location", required=True)
+    branch_id = fields.Many2one('store.branch', string="Branch", required=True)
+    location_id = fields.Many2one('store.location', string="Location", required=True,domain="[('branch_id', '=', branch_id)]")
     start_time = fields.Datetime(
         string="Start Time",
         default=fields.Datetime.now,
@@ -24,7 +25,8 @@ class StoreBatch(models.Model):
     end_time = fields.Datetime(string="End Time", readonly=True)
     consumed_qty = fields.Float(string="Consumed Quantity", store=True)
     earned_amount = fields.Float(string="Earned Amount", store=True)
-    active = fields.Boolean(string="Active", default=True, required=True)
+    
+    active = fields.Boolean(string="Active", default=True, required=True, readonly=True)
 
      # Add this field
     processed_order_ids = fields.Many2many(
@@ -34,6 +36,12 @@ class StoreBatch(models.Model):
         'order_id',
         string='Processed Orders'
     )
+
+
+    @api.onchange('branch_id')
+    def _onchange_branch_id(self):
+        self.location_id = False
+
 
     
     @api.model
@@ -81,11 +89,7 @@ class StoreBatch(models.Model):
     def create(self, vals):
         location_id = vals.get('location_id')
         product_id = vals.get('product_id')
-        active = vals.get('active')
-
-        if not active:
-            raise ValidationError(_("You cannot create a batch that is not active."))
-
+    
         if location_id and product_id:
             location = self.env['store.location'].browse(location_id)
             branch_id = location.branch_id.id

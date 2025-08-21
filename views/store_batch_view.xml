@@ -8,7 +8,8 @@
                     <group>
                         <field name="name"/>
                         <field name="product_id"/>
-                        <field name="location_id"/>
+                        <field name="branch_id"/> 
+                        <field name="location_id" domain="[('branch_id', '=', branch_id)]"/>
                     </group>
                     <group>
                         <field name="start_time"/>
@@ -40,6 +41,7 @@
                  
                 <field name="name" width="120"/>
                 <field name="product_id" width="150"/>
+                <field name="branch_id"  width="150"/>
                 <field name="location_id" width="150"/>
                 <field name="start_time" width="150"/>
                 <field name="end_time" width="150"/>
@@ -60,8 +62,8 @@
                 <!-- Searchable Fields -->
                 <field name="name"/>
                 <field name="product_id"/>
+                <field name="branch_id"/>
                 <field name="location_id"/>
-
                 <!-- Status Filters -->
                 <filter string="All Batches" name="all_batches" domain="['|', ('active', '=', True), ('active', '=', False)]" context="{'default_all_batches': True}"/>
                 <filter string="Active Batches" name="active" domain="[('active', '=', True)]"/>
@@ -85,8 +87,7 @@
                     <filter string="Location" name="group_location" domain="['|', ('active', '=', True), ('active', '=', False)]" context="{'group_by': 'location_id'}"/>
                     <filter string="Product" name="group_product" domain="[]" context="{'group_by': 'product_id'}"/>
                     <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'active'}"/>
-                    <!-- <filter string="Start Date" name="group_start" domain="[]" context="{'group_by': 'start_time:day'}"/>
-                    <filter string="End Date" name="group_end" domain="[]" context="{'group_by': 'end_time:day'}"/> -->
+                    <filter string="Branch" name="group_branch" domain="[]" context="{'group_by': 'branch_id'}"/>               
                 </group>
             </search>
 
@@ -98,6 +99,7 @@
         <field name="name">Store Batches</field>
         <field name="res_model">store.batch</field>
         <field name="view_mode">tree,form</field>
+        <field name="groups_id" eval="[(4, ref('store_product_batch.group_store_batch_admin'))]"/>
         <field name="context">{'search_default_all_batches': 1}</field>
         <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

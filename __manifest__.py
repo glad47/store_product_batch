@@ -7,7 +7,9 @@
     'website': 'https://gladdema.com',
     'depends': ['base', 'product', 'point_of_sale'],
     'data': [
-        'security/ir.model.access.csv',
+        'security/store_product_batch_security.xml',
+        'security/ir.model.access.csv', 
+        'data/demo_users.xml',
         'views/store_branch_view.xml',          
         'views/store_location_view.xml',
         'views/store_batch_view.xml',

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <!-- Store Batch Admin Group -->
+    <record id="group_store_batch_admin" model="res.groups">
+      <field name="name">Store Batch Admin</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Store Batch Limited User Group -->
+    <record id="group_store_batch_user" model="res.groups">
+      <field name="name">Store Batch User</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+     <!-- 👑 Default Admin User -->
+    <record id="base.user_admin" model="res.users">
+      <field name="groups_id" eval="[(4, ref('store_product_batch.group_store_batch_admin'))]"/>
+    </record>
+
+    <!-- 👤 Default Demo User -->
+    <record id="base.user_demo" model="res.users">
+      <field name="groups_id" eval="[(4, ref('store_product_batch.group_store_batch_user'))]"/>
+    </record>
+
+  </data>
+
+</odoo>
