@@ -9,7 +9,11 @@ class StoreBatch(models.Model):
     _description = 'Store Batch in Store'
     _rec_name = 'name'
 
-    name = fields.Char(string="Batch Name", required=True)
+    name = fields.Char(string="Batch Name", 
+                        copy=False,
+                        index=True,
+                        required=True,
+                        default=lambda self: self.env['ir.sequence'].next_by_code('store.batch.name'))
     product_id = fields.Many2one('product.product', string="Product", required=True)
     location_id = fields.Many2one('store.location', string="Location", required=True)
     start_time = fields.Datetime(
@@ -34,7 +38,6 @@ class StoreBatch(models.Model):
     
     @api.model
     def run_batch_consumption_tracker(self):
-        print("**************run_batch_consumption_tracker****************")
         active_batches = self.search([('active', '=', True)])
         for batch in active_batches:
             location = batch.location_id

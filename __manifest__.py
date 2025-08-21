@@ -12,6 +12,7 @@
         'views/store_location_view.xml',
         'views/store_batch_view.xml',
         'views/store_batch_sequence.xml',
+        'views/store_batch_sequence_name.xml',
         'views/store_batch_report_view.xml', 
         'views/store_batch_menu_view.xml',      
         'views/run_batch_consumption_tracker.xml', 

@@ -25,18 +25,18 @@
         <field name="model">store.batch</field>
         
         <field name="arch" type="xml">
-            <xpath expr="//tree" position="attributes">
+            <!-- <xpath expr="//tree" position="attributes">
                <attribute name="js_class">button_in_tree</attribute>
-           </xpath>
+           </xpath> -->
             <tree string="Store Batches">
-                <!-- <header>
+                <header>
                     <button name="action_refresh_batches_info"
                         type="object"
-                        string="Run Batch Tracker"
+                        string="Update Batch Info"
                         icon="fa-refresh"
                         class="btn-secondary"
                         />
-                </header> -->
+                </header>
                  
                 <field name="name" width="120"/>
                 <field name="product_id" width="150"/>

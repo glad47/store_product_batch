@@ -320,6 +320,12 @@ msgstr "متتبع الجناديل"
 msgid "Top Locations by Consumed Quantity"
 msgstr "أفضل المواقع حسب الكمية المستهلكة"
 
+
+#. module: store_product_batch
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_tree
+msgid "Update Batch Info"
+msgstr "تحديث معلومات الجندول"
+
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.report_store_batch_template
 msgid "Top Locations by Earned Amount"
