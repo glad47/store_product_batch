@@ -45,8 +45,8 @@
                 <field name="location_id" width="150"/>
                 <field name="start_time" width="150"/>
                 <field name="end_time" width="150"/>
-                <field name="consumed_qty" width="150"/>
-                <field name="earned_amount" width="150"/>
+                <field name="consumed_qty" width="150" groups="store_product_batch.group_store_batch_admin"/>
+                <field name="earned_amount" width="150" groups="store_product_batch.group_store_batch_admin"/>
                 <field name="active" width="80"/>
                 
             </tree>

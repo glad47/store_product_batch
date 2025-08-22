@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-20 13:00+0000\n"
-"PO-Revision-Date: 2025-08-20 13:00+0000\n"
+"POT-Creation-Date: 2025-08-22 16:12+0000\n"
+"PO-Revision-Date: 2025-08-22 16:12+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: store_product_batch
+#: model:ir.module.category,description:store_product_batch.module_category_store_batch
+msgid "Access control for store batch users."
+msgstr "التحكم في الوصول لمستخدمي جناديل المتجر."
 
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_batch__active
@@ -28,9 +33,14 @@ msgid "Active Batches"
 msgstr "الجناديل النشطة"
 
 #. module: store_product_batch
+#: model:res.groups,name:store_product_batch.group_store_batch_admin
+msgid "Administrator"
+msgstr "مدير النظام"
+
+#. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
 msgid "All Batches"
-msgstr "جميع الجناديل"
+msgstr "كل الجناديل"
 
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_branch_search
@@ -40,7 +50,7 @@ msgstr "مؤرشف"
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
 msgid "Batch Filters"
-msgstr "مرشحات الجندول"
+msgstr "مرشحات الجناديل"
 
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_batch__name
@@ -50,10 +60,12 @@ msgstr "اسم الجندول"
 #. module: store_product_batch
 #: model:ir.ui.menu,name:store_product_batch.menu_store_batch
 msgid "Batches"
-msgstr "جناديل"
+msgstr "الجناديل"
 
 #. module: store_product_batch
+#: model:ir.model.fields,field_description:store_product_batch.field_store_batch__branch_id
 #: model:ir.model.fields,field_description:store_product_batch.field_store_location__branch_id
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
 msgid "Branch"
 msgstr "فرع"
 
@@ -72,7 +84,6 @@ msgstr "الفرع:"
 msgid "Branches"
 msgstr "الفروع"
 
-
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.report_store_batch_template
 msgid "Consumed Qty"
@@ -86,17 +97,17 @@ msgstr "الكمية المستهلكة"
 #. module: store_product_batch
 #: model_terms:ir.actions.act_window,help:store_product_batch.action_store_batch
 msgid "Create and manage your store batch here."
-msgstr "أنشئ وأدر الجناديل الخاصة بك هنا."
+msgstr "أنشئ وأدر جناديل المتجر هنا."
 
 #. module: store_product_batch
 #: model_terms:ir.actions.act_window,help:store_product_batch.action_store_branch_view
 msgid "Create and manage your store branches here."
-msgstr "أنشئ وأدر فروع المتجر الخاصة بك هنا."
+msgstr "أنشئ وأدر فروع المتجر هنا."
 
 #. module: store_product_batch
 #: model_terms:ir.actions.act_window,help:store_product_batch.action_store_location
 msgid "Create and manage your store locations here."
-msgstr "أنشئ وأدر مواقع المتجر الخاصة بك هنا."
+msgstr "أنشئ وأدر مواقع المتجر هنا."
 
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_batch__create_uid
@@ -111,6 +122,7 @@ msgstr "أنشئ بواسطة"
 #: model:ir.model.fields,field_description:store_product_batch.field_store_location__create_date
 msgid "Created on"
 msgstr "تاريخ الإنشاء"
+
 
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_batch__display_name
@@ -146,7 +158,6 @@ msgstr "تجميع حسب"
 #: model:ir.model.fields,field_description:store_product_batch.field_store_location__id
 msgid "ID"
 msgstr "المعرف"
-
 
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_search
@@ -192,24 +203,24 @@ msgid "Ongoing Batches"
 msgstr "الجناديل الجارية"
 
 #. module: store_product_batch
-#: model:ir.model.fields,help:store_product_batch.field_store_branch__processed_order_ids
-msgid "Orders already counted for this batch"
-msgstr "الطلبات التي تم احتسابها بالفعل لهذا الجندول"
+#. odoo-javascript
+#: code:addons/store_product_batch/static/src/xml/tree_button.xml:0
+#, python-format
+msgid "Open Wizard"
+msgstr "فتح المعالج"
 
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_branch__pos_session_ids
-msgid "POS Sessions"
-msgstr "جلسات نقاط البيع"
-
+msgid "POS"
+msgstr "نقطة البيع"
 
 #. module: store_product_batch
-#: model:ir.model,name:store_product_batch.model_pos_session
-msgid "Point of Sale Session"
-msgstr "جلسة نقطة البيع"
+#: model:ir.model,name:store_product_batch.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "تهيئة نقطة البيع"
 
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_batch__processed_order_ids
-#: model:ir.model.fields,field_description:store_product_batch.field_store_branch__processed_order_ids
 msgid "Processed Orders"
 msgstr "الطلبات المعالجة"
 
@@ -223,17 +234,8 @@ msgstr "المنتج"
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_location__code
 msgid "Reference"
-msgstr "المرجع"
+msgstr "الرمز المرجعي"
 
-#. module: store_product_batch
-#: model:ir.ui.menu,name:store_product_batch.menu_run_batch_tracker
-msgid "Refresh Batches Info"
-msgstr "تحديث معلومات الجناديل"
-
-#. module: store_product_batch
-#: model:ir.actions.server,name:store_product_batch.action_run_batch_tracker_global
-msgid "Run Batch Tracker"
-msgstr "تشغيل متتبع الجندول"
 
 #. module: store_product_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_batch__start_time
@@ -251,42 +253,43 @@ msgid "Status"
 msgstr "الحالة"
 
 #. module: store_product_batch
+#: model:ir.module.category,name:store_product_batch.module_category_store_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_form
 msgid "Store Batch"
-msgstr "جندول "
+msgstr "الجندول"
 
 #. module: store_product_batch
 #: model:ir.actions.server,name:store_product_batch.ir_cron_store_batch_tracker_ir_actions_server
 #: model:ir.cron,cron_name:store_product_batch.ir_cron_store_batch_tracker
 msgid "Store Batch Consumption Tracker"
-msgstr "متتبع استهلاك الجناديل "
+msgstr "متعقب استهلاك جندول المتجر"
 
 #. module: store_product_batch
 #: model:ir.actions.report,name:store_product_batch.action_store_batch_web_report
 #: model:ir.ui.menu,name:store_product_batch.menu_store_root_web_report
 msgid "Store Batch Report"
-msgstr "تقرير الجناديل "
+msgstr "تقرير الجناديل"
 
 #. module: store_product_batch
 #: model:ir.model,name:store_product_batch.model_report_store_product_batch_report_store_batch_template
 msgid "Store Batch Summary Report"
-msgstr "تقرير ملخص جندول "
+msgstr "تقرير ملخص جندول المتجر"
 
 #. module: store_product_batch
 #: model:ir.model,name:store_product_batch.model_store_batch
 msgid "Store Batch in Store"
-msgstr "جندول  في المتجر"
+msgstr "جندول المتجر"
 
 #. module: store_product_batch
 #: model:ir.actions.act_window,name:store_product_batch.action_store_batch
 #: model:ir.model.fields,field_description:store_product_batch.field_store_location__batch_ids
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_tree
 msgid "Store Batches"
-msgstr "الجناديل"
+msgstr "جناديل المتجر"
 
 #. module: store_product_batch
 #: model:ir.model,name:store_product_batch.model_store_branch
-#: model:ir.model.fields,field_description:store_product_batch.field_pos_session__branch_id
+#: model:ir.model.fields,field_description:store_product_batch.field_pos_config__branch_id
 #: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_branch_form_simple
 msgid "Store Branch"
 msgstr "فرع المتجر"
@@ -302,7 +305,6 @@ msgstr "فروع المتجر"
 msgid "Store Location"
 msgstr "موقع المتجر"
 
-
 #. module: store_product_batch
 #: model:ir.actions.act_window,name:store_product_batch.action_store_location
 #: model:ir.model.fields,field_description:store_product_batch.field_store_branch__location_ids
@@ -313,18 +315,12 @@ msgstr "مواقع المتجر"
 #. module: store_product_batch
 #: model:ir.ui.menu,name:store_product_batch.menu_store_root
 msgid "Store Product Tracker"
-msgstr "متتبع الجناديل"
+msgstr "متعقب الجناديل"
 
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.report_store_batch_template
 msgid "Top Locations by Consumed Quantity"
 msgstr "أفضل المواقع حسب الكمية المستهلكة"
-
-
-#. module: store_product_batch
-#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_tree
-msgid "Update Batch Info"
-msgstr "تحديث معلومات الجندول"
 
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.report_store_batch_template
@@ -339,21 +335,24 @@ msgstr "أفضل المنتجات"
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.report_store_batch_template
 msgid "Total Consumed:"
-msgstr "إجمالي الاستهلاك:"
+msgstr "إجمالي المستهلك:"
 
 #. module: store_product_batch
-#. odoo-python
-#: code:addons/store_product_batch/models/store_batch.py:0
-#, python-format
-msgid "You cannot create a batch that is not active."
-msgstr "لا يمكنك إنشاء جندول غير نشط."
+#: model_terms:ir.ui.view,arch_db:store_product_batch.view_store_batch_tree
+msgid "Update Batch Info"
+msgstr "تحديث معلومات الجناديل"
+
+#. module: store_product_batch
+#: model:res.groups,name:store_product_batch.group_store_batch_user
+msgid "User"
+msgstr "مستخدم"
 
 #. module: store_product_batch
 #. odoo-python
 #: code:addons/store_product_batch/models/store_batch.py:0
 #, python-format
 msgid "You cannot reactivate a store batch that has already ended."
-msgstr "لا يمكنك إعادة تنشيط جندول انتهى بالفعل."
+msgstr "لا يمكنك إعادة تنشيط جندول المتجر الذي انتهى بالفعل."
 
 #. module: store_product_batch
 #. odoo-python
@@ -364,9 +363,5 @@ msgstr "يجب أرشفة الفرع قبل حذفه."
 
 #. module: store_product_batch
 #: model_terms:ir.ui.view,arch_db:store_product_batch.report_store_batch_template
-msgid ""
-"|\n"
-"                  Total Earned:"
-msgstr ""
-"|\n"
-"                  إجمالي المكتسب:"
+msgid "|\n                  Total Earned:"
+msgstr "|\n                  إجمالي المكتسب:"

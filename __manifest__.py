@@ -20,13 +20,6 @@
         'views/run_batch_consumption_tracker.xml', 
         'report/report_store_batch_template.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            '/store_product_batch/static/src/js/tree_button.js',
-            '/store_product_batch/static/src/xml/tree_button.xml',
-        ]
-},
-
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
