@@ -4,72 +4,64 @@
     <template id="report_store_batch_template" t-name="store_product_batch.report_store_batch_template">
       <t t-call="web.html_container">
         <t t-call="web.internal_layout">
-          <t t-if="data">
-            <t t-set="branches" t-value="data['branches']"/>
+          <t class="mb-4">
+          <h4 class="text-warning">Branch Chart</h4>
 
-            <t t-foreach="branches" t-as="branch">
-              <!-- Branch Header -->
-              <div class="card mb-5">
-                <div class="card-header bg-primary text-white">
-                  <h3 class="mb-0">Branch: <t t-esc="branch['branch_name']"/></h3>
-                  <p class="mb-0">Total Consumed: <strong><t t-esc="branch['total_consumed']"/></strong> |
-                  Total Earned: <strong><t t-esc="branch['total_earned']"/></strong></p>
-                </div>
+           <div id="my_chart" style="height:400px;"></div>
+           <div id="chart_controls" class="mb-3">
+            <button class="btn btn-outline-primary" data-dimension="Year">Year</button>
+            <button class="btn btn-outline-success" data-dimension="Month">Month</button>
+            <button class="btn btn-outline-warning" data-dimension="Week">Week</button>
+          </div>
 
-                <div class="card-body">
+            <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+            <script>
+              const chartDom = document.getElementById('my_chart');
+              const chart = echarts.init(chartDom);
 
-                  <!-- Locations by Consumed Quantity -->
-                  <div class="mb-4">
-                    <h4 class="text-info">Top Locations by Consumed Quantity</h4>
-                    <table class="table table-bordered table-hover">
-                      <thead><tr><th>Location</th><th>Consumed Qty</th></tr></thead>
-                      <tbody>
-                        <t t-foreach="branch['location_by_qty']" t-as="loc">
-                          <tr>
-                            <td><t t-esc="loc[0]"/></td>
-                            <td><t t-esc="loc[1]"/></td>
-                          </tr>
-                        </t>
-                      </tbody>
-                    </table>
-                  </div>
+              function updateChart(timeDimension) {
+                fetch('/store_product_batch/chart_data', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                  },
+                  body: JSON.stringify({ time_dimension: timeDimension })
+                })
+                .then(response => response.json())
+                .then(option => {
+                  chart.setOption(option);
+                })
+                .catch(error => {
+                  console.error('Failed to load chart data:', error);
+                });
+              }
 
-                  <!-- Locations by Earned Amount -->
-                  <div class="mb-4">
-                    <h4 class="text-secondary">Top Locations by Earned Amount</h4>
-                    <table class="table table-bordered table-hover">
-                      <thead><tr><th>Location</th><th>Earned Amount</th></tr></thead>
-                      <tbody>
-                        <t t-foreach="branch['location_by_earned']" t-as="loc">
-                          <tr>
-                            <td><t t-esc="loc[0]"/></td>
-                            <td><t t-esc="loc[1]"/></td>
-                          </tr>
-                        </t>
-                      </tbody>
-                    </table>
-                  </div>
+              document.addEventListener("DOMContentLoaded", function () {
+                updateChart('Year');  // Initial render
 
-                  <!-- Product Summary -->
-                  <div class="mb-4">
-                    <h4 class="text-success">Top Products</h4>
-                    <table class="table table-bordered table-hover">
-                      <thead><tr><th>Product</th><th>Consumed Qty</th></tr></thead>
-                      <tbody>
-                        <t t-foreach="branch['product_summary']" t-as="prod">
-                          <tr>
-                            <td><t t-esc="prod[0]"/></td>
-                            <td><t t-esc="prod[1]"/></td>
-                          </tr>
-                        </t>
-                      </tbody>
-                    </table>
-                  </div>
+                const selector = document.getElementById('time_selector');
+                if (selector) {
+                  selector.addEventListener('change', function (e) {
+                    updateChart(e.target.value);
+                  });
+                }
 
-                </div>
-              </div>
-            </t>
-          </t>
+                const buttons = document.querySelectorAll('#chart_controls button');
+                buttons.forEach(btn => {
+                  btn.addEventListener('click', function () {
+                    const dimension = btn.getAttribute('data-dimension');
+                    updateChart(dimension);
+                  });
+                });
+              });
+
+            </script>
+
+
+        </t>
+
+        
         </t>
       </t>
     </template>

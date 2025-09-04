@@ -10,7 +10,7 @@ class StoreBranch(models.Model):
 
     name = fields.Char(string='Branch Name', required=True)
     active = fields.Boolean(string="Active", default=True)
-    pos_session_ids = fields.One2many('pos.config', 'branch_id', string='POS')
+    pos_ids = fields.One2many('pos.config', 'branch_id', string='POS')
     location_ids = fields.One2many('store.location', 'branch_id', string='Store Locations')
 
 

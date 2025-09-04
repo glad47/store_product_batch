@@ -1,5 +1,5 @@
 <odoo>
-    <record id="view_store_batch_form" model="ir.ui.view">
+    <!-- <record id="view_store_batch_form" model="ir.ui.view">
         <field name="name">store.batch.form</field>
         <field name="model">store.batch</field>
         <field name="arch" type="xml">
@@ -19,16 +19,49 @@
                 </sheet>
             </form>
         </field>
+    </record> -->
+
+    <record id="view_store_batch_form" model="ir.ui.view">
+        <field name="name">store.batch.form</field>
+        <field name="model">store.batch</field>
+        <field name="arch" type="xml">
+            <form string="Store Batch">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="product_ids" widget="many2many_tags"/>
+                        <field name="branch_id"/>
+                        <field name="location_ids" widget="many2many_tags"
+                            domain="[('branch_id', '=', branch_id)]"/>
+                    </group>
+                    <group>
+                        <field name="start_time"/>
+                        <field name="end_time"/>
+                        <field name="active"/>
+                    </group>
+
+                    <!-- Embedded Batch Lines -->
+                    <group string="Batch Consumption Lines">
+                        <field name="batch_line_ids" readonly="1">
+                            <tree>
+                                <field name="product_id"/>
+                                <field name="consumed_qty"/>
+                                <field name="earned_amount"/>
+                                <field name="counted"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
     </record>
 
-    <record id="view_store_batch_tree" model="ir.ui.view">
+
+    <!-- <record id="view_store_batch_tree" model="ir.ui.view">
         <field name="name">store.batch.tree</field>
         <field name="model">store.batch</field>
         
         <field name="arch" type="xml">
-            <!-- <xpath expr="//tree" position="attributes">
-               <attribute name="js_class">button_in_tree</attribute>
-           </xpath> -->
             <tree string="Store Batches">
                 <header>
                     <button name="action_refresh_batches_info"
@@ -51,26 +84,53 @@
                 
             </tree>
         </field>
+    </record> -->
+
+
+    <record id="view_store_batch_tree" model="ir.ui.view">
+        <field name="name">store.batch.tree</field>
+        <field name="model">store.batch</field>
+        <field name="arch" type="xml">
+            <tree string="Store Batches">
+                <header>
+                    <button name="action_refresh_batches_info"
+                            type="object"
+                            string="Update Batch Info"
+                            icon="fa-refresh"
+                            class="btn-secondary"/>
+                </header>
+                <field name="name" width="120"/>
+                <field name="product_ids" widget="many2many_tags" width="150"/>
+                <field name="branch_id" width="150"/>
+                <field name="location_ids" widget="many2many_tags" width="150"/>
+                <field name="start_time" width="150"/>
+                <field name="end_time" width="150"/>
+                <field name="consumed_qty" width="150" groups="store_product_batch.group_store_batch_admin"/>
+                <field name="earned_amount" width="150" groups="store_product_batch.group_store_batch_admin"/>
+                <field name="active" width="80"/>
+            </tree>
+        </field>
     </record>
 
 
-    <record id="view_store_batch_search" model="ir.ui.view">
+
+    <!-- <record id="view_store_batch_search" model="ir.ui.view">
         <field name="name">store.batch.search</field>
         <field name="model">store.batch</field>
         <field name="arch" type="xml">
             <search string="Batch Filters">
-                <!-- Searchable Fields -->
+              
                 <field name="name"/>
                 <field name="product_id"/>
                 <field name="branch_id"/>
                 <field name="location_id"/>
-                <!-- Status Filters -->
+              
                 <filter string="All Batches" name="all_batches" domain="['|', ('active', '=', True), ('active', '=', False)]" context="{'default_all_batches': True}"/>
                 <filter string="Active Batches" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Inactive Batches" name="inactive" domain="[('active', '=', False)]"/>
                 
 
-                <!-- Time-Based Filters -->
+                
                 <filter string="Started Today" name="today"
                     domain="[
                             '|', ('active', '=', False) , ('active', '=', True),
@@ -82,7 +142,7 @@
                         domain="[('active', '=', True), ('start_time', '&lt;=', context_today())]"/>
 
 
-                <!-- Group By Section -->
+               
                 <group expand="0" string="Group By">
                     <filter string="Location" name="group_location" domain="['|', ('active', '=', True), ('active', '=', False)]" context="{'group_by': 'location_id'}"/>
                     <filter string="Product" name="group_product" domain="[]" context="{'group_by': 'product_id'}"/>
@@ -92,7 +152,51 @@
             </search>
 
         </field>
+    </record> -->
+
+
+    <record id="view_store_batch_search" model="ir.ui.view">
+        <field name="name">store.batch.search</field>
+        <field name="model">store.batch</field>
+        <field name="arch" type="xml">
+            <search string="Batch Filters">
+                <field name="name"/>
+                <field name="product_ids"/>
+                <field name="branch_id"/>
+                <field name="location_ids"/>
+
+                <filter string="All Batches" name="all_batches"
+                        domain="['|', ('active', '=', True), ('active', '=', False)]"
+                        context="{'default_all_batches': True}"/>
+                <filter string="Active Batches" name="active"
+                        domain="[('active', '=', True)]"/>
+                <filter string="Inactive Batches" name="inactive"
+                        domain="[('active', '=', False)]"/>
+
+                <filter string="Started Today" name="today"
+                        domain="[
+                            '|', ('active', '=', False), ('active', '=', True),
+                            ('start_time', '&gt;=', context_today())
+                        ]"/>
+                <filter string="Expired Batches" name="expired"
+                        domain="[('active', '=', False), ('end_time', '&lt;=', context_today())]"/>
+                <filter string="Ongoing Batches" name="ongoing"
+                        domain="[('active', '=', True), ('start_time', '&lt;=', context_today())]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Location" name="group_location"
+                            context="{'group_by': 'location_ids'}"/>
+                    <filter string="Product" name="group_product"
+                            context="{'group_by': 'product_ids'}"/>
+                    <filter string="Status" name="group_status"
+                            context="{'group_by': 'active'}"/>
+                    <filter string="Branch" name="group_branch"
+                            context="{'group_by': 'branch_id'}"/>
+                </group>
+            </search>
+        </field>
     </record>
+
 
 
     <record id="action_store_batch" model="ir.actions.act_window">
@@ -111,7 +215,7 @@
 
 
 
-    <!-- <record id="action_run_batch_tracker_global" model="ir.actions.server">
+    <record id="action_run_batch_tracker_global" model="ir.actions.server">
         <field name="name">Run Batch Tracker</field>
         <field name="model_id" ref="model_store_batch"/>
         <field name="binding_model_id" ref="model_store_batch"/>
@@ -119,7 +223,7 @@
         <field name="code">
             model.action_refresh_batches_info()
         </field>
-    </record> -->
+    </record>
 
 
 

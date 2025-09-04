@@ -10,7 +10,7 @@
                     </group>
 
                     <group>
-                        <field name="pos_session_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="pos_ids" widget="many2many_tags" options="{'no_create': True}"/>
                         <field name="location_ids" widget="many2many_tags" options="{'no_create': True}"/>
                     </group>
                 </sheet>

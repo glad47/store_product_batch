@@ -1,0 +1,20 @@
+<odoo>
+  <record id="view_store_sale_graph" model="ir.ui.view">
+    <field name="name">store.batch.graph</field>
+    <field name="model">store.batch</field>
+    <field name="type">graph</field>
+    <field name="arch" type="xml">
+      <graph string="Sales by Location" type="line">
+        <field name="location_ids" group="True"/>
+        <field name="consumed_qty" operator="sum"/>
+      </graph>
+    </field>
+  </record>
+
+  <record id="action_store_sale_graph" model="ir.actions.act_window">
+    <field name="name">Sales Graph</field>
+    <field name="res_model">store.batch</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="view_store_sale_graph"/>
+  </record>
+</odoo>

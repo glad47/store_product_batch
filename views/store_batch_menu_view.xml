@@ -37,4 +37,10 @@
       </record>
 
 
+      <menuitem id="menu_store_sale_graph"
+          name="Sales Graph"
+          parent="menu_store_root"
+          action="action_store_sale_graph"/>
+
+
 </odoo>
