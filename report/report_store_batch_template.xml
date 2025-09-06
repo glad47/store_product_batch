@@ -7,54 +7,149 @@
           <t class="mb-4">
           <h4 class="text-warning">Branch Chart</h4>
 
-           <div id="my_chart" style="height:400px;"></div>
-           <div id="chart_controls" class="mb-3">
-            <button class="btn btn-outline-primary" data-dimension="Year">Year</button>
-            <button class="btn btn-outline-success" data-dimension="Month">Month</button>
-            <button class="btn btn-outline-warning" data-dimension="Week">Week</button>
+           
+           <div id="chart_controls" style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <div class="form-group" style="max-width: 200px; width: 100%; flex: 1 1 200px; height: 60px;">
+              <select id="yearSelect" class="form-control" style="height: 40px;"></select>
+            </div>
+
+            <div class="form-group" id="monthSection" style="max-width: 200px; width: 100%; flex: 1 1 200px; height: 60px;">
+              <select id="monthSelect" class="form-control" style="height: 40px;"></select>
+            </div>
+
+            <button id="resetBtn" class="btn btn-outline-danger" style="max-width: 200px; width: 100%; flex: 1 1 200px; height: 40px;">
+              Reset
+            </button>
           </div>
+
+
+
+
+          <div id="my_chart" style="height:400px;"></div>
 
             <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
             <script>
+              document.addEventListener('DOMContentLoaded', function () {
+              const yearSelect = document.getElementById('yearSelect');
+              const monthSelect = document.getElementById('monthSelect');
+              const dayView = document.getElementById('dayView');
+              const resetBtn = document.getElementById('resetBtn');
+
               const chartDom = document.getElementById('my_chart');
               const chart = echarts.init(chartDom);
 
-              function updateChart(timeDimension) {
-                fetch('/store_product_batch/chart_data', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                  },
-                  body: JSON.stringify({ time_dimension: timeDimension })
-                })
-                .then(response => response.json())
-                .then(option => {
-                  chart.setOption(option);
-                })
-                .catch(error => {
-                  console.error('Failed to load chart data:', error);
-                });
-              }
+              // Initial chart render with no year/month selected
+              <!--  -->
 
-              document.addEventListener("DOMContentLoaded", function () {
-                updateChart('Year');  // Initial render
+              // Disable month until year is selected
+              monthSelect.disabled = true;
+              <!-- dayView.parentElement.querySelector('label').classList.add('disabled'); -->
+              
+              // Fetch years
+              fetch('/store_product_batch/get_years', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+              })
+                .then(res => res.json())
+                .then(data => {
+                  console.log("*******************5")
+                  console.log(data)
+                  yearSelect.innerHTML = '';
 
-                const selector = document.getElementById('time_selector');
-                if (selector) {
-                  selector.addEventListener('change', function (e) {
-                    updateChart(e.target.value);
+                  const placeholder = document.createElement('option');
+                  placeholder.value = '';
+                  placeholder.textContent = '-- Select Year --';
+                  placeholder.disabled = true;
+                  placeholder.selected = true;
+                  yearSelect.appendChild(placeholder);
+
+                  data.result.years.forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearSelect.appendChild(option);
                   });
+
+                  updateChartWithDateContext(null, null);
+                });
+
+              
+
+              // Year selection
+              yearSelect.addEventListener('change', function () {
+                const selectedYear = this.value;
+                monthSelect.innerHTML = '';
+                monthSelect.disabled = true;
+
+                if (!selectedYear) {
+                  updateChartWithDateContext(null, null);
+                  return;
                 }
 
-                const buttons = document.querySelectorAll('#chart_controls button');
-                buttons.forEach(btn => {
-                  btn.addEventListener('click', function () {
-                    const dimension = btn.getAttribute('data-dimension');
-                    updateChart(dimension);
+                fetch('/store_product_batch/get_months', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ year: selectedYear })
+                })
+                  .then(res => res.json())
+                  .then(data => {
+                    console.log("working ......")
+                    const placeholder = document.createElement('option');
+                    placeholder.value = '';
+                    placeholder.textContent = '-- Select Month --';
+                    placeholder.disabled = true;
+                    placeholder.selected = true;
+                    monthSelect.appendChild(placeholder);
+
+                    data.result.months.forEach(month => {
+                      const option = document.createElement('option');
+                      option.value = month;
+                      option.textContent = month;
+                      monthSelect.appendChild(option);
+                    });
+
+                    monthSelect.disabled = false;
+                    updateChartWithDateContext(selectedYear, null);
                   });
-                });
               });
+
+              // Month selection
+              monthSelect.addEventListener('change', function () {
+                const selectedMonth = this.value;
+                const selectedYear = yearSelect.value;
+                if (!selectedMonth || !selectedYear) return;
+                updateChartWithDateContext(selectedYear, selectedMonth);
+              });
+
+              // Reset
+              resetBtn.addEventListener('click', function () {
+                yearSelect.value = '';
+                monthSelect.innerHTML = '';
+                monthSelect.disabled = true;
+                updateChartWithDateContext(null, null);
+              });
+
+              function updateChartWithDateContext(year, month) {
+                console.log("calling the updateChartWithDateContext")
+                
+                fetch('/store_product_batch/chart_data', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({"payload" : { year, month }})  
+                })
+                  .then(response => response.json())
+                  .then(option => {
+                    console.log("****************4")
+                    console.log(option)
+                    chart.setOption(option.result);
+                  })
+                  .catch(error => {
+                    console.error('Failed to load chart data:', error);
+                  });
+              }
+            });
+
 
             </script>
 
