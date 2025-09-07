@@ -30,17 +30,25 @@
 
       <!-- Web Report: admin only -->
       <record id="menu_store_root_web_report" model="ir.ui.menu">
-      <field name="name">Store Batch Report</field>
+      <field name="name">Location Report</field>
       <field name="parent_id" ref="menu_store_root"/>
       <field name="action" ref="action_store_batch_web_report"/>
       <field name="groups_id" eval="[(4, ref('store_product_batch.group_store_batch_admin'))]"/>
       </record>
 
 
-      <menuitem id="menu_store_sale_graph"
+      <record id="menu_store_root_web_report_prod" model="ir.ui.menu">
+      <field name="name">Product Report</field>
+      <field name="parent_id" ref="menu_store_root"/>
+      <field name="action" ref="action_store_batch_web_report_prod"/>
+      <field name="groups_id" eval="[(4, ref('store_product_batch.group_store_batch_admin'))]"/>
+      </record>
+
+
+      <!-- <menuitem id="menu_store_sale_graph"
           name="Sales Graph"
           parent="menu_store_root"
-          action="action_store_sale_graph"/>
+          action="action_store_sale_graph"/> -->
 
 
 </odoo>

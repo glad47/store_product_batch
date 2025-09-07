@@ -21,6 +21,7 @@
         'views/store_batch_menu_view.xml',      
         'views/run_batch_consumption_tracker.xml', 
         'report/report_store_batch_template.xml',
+        'report/report_store_batch_template_prod.xml',
         
     ],
     'assets': {

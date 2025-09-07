@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
-    <template id="report_store_batch_template" t-name="store_product_batch.report_store_batch_template">
+    <template id="report_store_batch_template_prod" t-name="store_product_batch.report_store_batch_template_prod">
       <t t-call="web.html_container">
         <t t-call="web.internal_layout">
           <t class="mb-4">
@@ -52,18 +52,18 @@
                 
 
                 // Fetch branches on load
-                fetch('/store_product_batch/get_branches', {
+                fetch('/store_product_batch/get_branches_prod', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({})
                 })
                   .then(res => res.json())
                   .then(data => {
-                    branchSelect.innerHTML = '';
+                    branchSelect.innerHTML = '-- اختر الفرع --';
 
                     const placeholder = document.createElement('option');
                     placeholder.value = '';
-                    placeholder.textContent = '-- اختر الفرع --';
+                    placeholder.textContent = '';
                     placeholder.disabled = true;
                     placeholder.selected = true;
                     branchSelect.appendChild(placeholder);
@@ -94,7 +94,7 @@
                 // Fetch years for selected branch
                 function triggerYearFetch(branchId) {
                   yearSelect.disabled = false;
-                  fetch('/store_product_batch/get_years', {
+                  fetch('/store_product_batch/get_years_prod', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ branch_id: branchId })
@@ -136,7 +136,7 @@
                   return;
                 }
 
-                fetch('/store_product_batch/get_months', {
+                fetch('/store_product_batch/get_months_prod', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ year: selectedYear })
@@ -181,9 +181,8 @@
               });
 
               function updateChartWithDateContext(branchId, year, month) {
-            
 
-                fetch('/store_product_batch/chart_data', {
+                fetch('/store_product_batch/chart_data_prod', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({"payload" : { branch:branchId, year, month }})  

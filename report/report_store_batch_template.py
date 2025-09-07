@@ -16,12 +16,22 @@ class StoreBatchReport(http.Controller):
     MONTH_KEYS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     
+
+    @http.route('/store_product_batch/get_branches', type='json', auth='user', methods=['POST'])
+    def get_branches(self):
+        branches = request.env['store.branch'].search([('active', '=', True)])
+        result = [{'id': b.id, 'name': b.name} for b in branches]
+        return {'branches': result}
+    
+
+    
     @http.route('/store_product_batch/get_years', type='json', auth='user', methods=['POST'])
     def get_years(self):
-        print("00000000000000000000000000000000000000000000000000000000000000000")
         years = request.env['store.batch'].search(['|', ('active', '=', False), ('active', '=', True)]).mapped('start_time')
         unique_years = sorted({dt.year for dt in years if dt})
         return {'years': unique_years}
+    
+
     
 
     @http.route('/store_product_batch/get_months', type='json', auth='user', methods=['POST'])
@@ -35,6 +45,8 @@ class StoreBatchReport(http.Controller):
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
         return {'months': all_months}
+    
+
 
 
     
@@ -49,17 +61,17 @@ class StoreBatchReport(http.Controller):
         days = list(range(1, calendar.monthrange(year, month_num)[1] + 1))
         return {'days': days}
     
+
+
+    
     @http.route('/store_product_batch/chart_data', type='json', auth='user', methods=['POST'])
     def get_chart_data(self):
         data = json.loads(request.httprequest.data)
-        print("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         payload= data['payload']
+        branch = payload['branch']
+        
         year = payload['year']
-        print("1")
-        print(payload['year'])
         month = payload['month']
-        print("2")
-        print(payload['month'])
 
         # Determine time_dimension granularity
         if not year and not month:
@@ -73,13 +85,12 @@ class StoreBatchReport(http.Controller):
         
            
         payload["time_dimension"] = time_dimension
-        print("3")
-        print(payload['time_dimension'])
-        print("Incoming payload:", payload)
-        print("Resolved time_dimension:", time_dimension)
 
         # Fetch all batch records (active and inactive)
-        docids = request.env['store.batch'].search(['|', ('active', '=', False), ('active', '=', True)]).ids
+        docids = request.env['store.batch'].search([
+                                                ('branch_id', '=', branch),
+                                                ('active', 'in', [True, False])
+                                            ]).ids
 
         # Get chart data based on resolved time_dimension
         report_data = self._get_report_values(docids, payload)
@@ -91,8 +102,6 @@ class StoreBatchReport(http.Controller):
 
     @api.model
     def _get_report_values(self, docids, data=None):
-        print("XXXXXXXXXXXXXXXXXXXXXXXXX")
-        print(data)
         return self.build_batch_consumption_report(
             docids=docids,
             doc_model='store.batch',
@@ -120,57 +129,69 @@ class StoreBatchReport(http.Controller):
             'earned_amount': 0.0
         })))
 
-        branches = request.env['store.branch'].search([])
-        batches = request.env['store.batch'].search([('active', 'in', [True, False])])
+        
+
+        selected_branch = request.env['store.branch'].search([('id', '=', data["branch"])])
+        
+        batches = request.env['store.batch'].search([
+                                                ('branch_id', '=', selected_branch.id),
+                                                ('active', 'in', [True, False])
+                                            ])
+        
+        
         # Pre-initialize time keys with zeros
-        for branch in branches:
-            for location in branch.location_ids:
-                branch_id = branch.id
-                location_id = location.id
+        
+        for location in selected_branch.location_ids:
+            branch_id = selected_branch.id
+            location_id = location.id
 
-                if time_granularity == 'day' and data["year"] and data["month"]:
-                    for day in range(1, 32):  # Adjust for actual month length if needed
-                        summary[branch_id][location_id][str(day)]  # triggers default zero init
-                elif time_granularity == 'month' and data["year"]:
-                    for month in MONTH_KEYS:
-                        summary[branch_id][location_id][month]
-                elif time_granularity == 'year':
-                    current_year = data["year"]
-                    summary[branch_id][location_id][str(current_year)]
+            if time_granularity == 'day' and data["year"] and data["month"]:
+                for day in range(1, 32):  # Adjust for actual month length if needed
+                    summary[branch_id][location_id][str(day)]  # triggers default zero init
+            elif time_granularity == 'month' and data["year"]:
+                for month in MONTH_KEYS:
+                    summary[branch_id][location_id][month]
+            elif time_granularity == 'year':
+                year_raw = data.get("year")
+                try:
+                    current_year = int(year_raw) if year_raw is not None else datetime.now().year
+                except (TypeError, ValueError):
+                    current_year = datetime.now().year 
+                summary[branch_id][location_id][str(current_year)]
 
-        for branch in branches:
-            for location in branch.location_ids:
-                branch_id = branch.id
-                location_id = location.id
+       
+        for location in selected_branch.location_ids:
+            branch_id = selected_branch.id
+            location_id = location.id
 
-                for batch in batches:
-                    if location not in batch.location_ids or not batch.start_time:
+            for batch in batches:
+                if location not in batch.location_ids or not batch.start_time:
+                    continue
+
+                # Filter by year and/or month based on granularity
+                batch_year = str(batch.start_time.year) 
+                batch_month = MONTH_KEYS[batch.start_time.month - 1] 
+
+                if time_granularity == 'day':
+                    if data["year"] and data["month"] and (batch_year != str(data["year"]) or batch_month != data["month"]):
+                        continue
+                elif time_granularity == 'month':
+                    if data["year"] and batch_year != str(data["year"]):
                         continue
 
-                    # Filter by year and/or month based on granularity
-                    batch_year = str(batch.start_time.year) 
-                    batch_month = MONTH_KEYS[batch.start_time.month - 1] 
-
-                    if time_granularity == 'day':
-                        if data["year"] and data["month"] and (batch_year != str(data["year"]) or batch_month != data["month"]):
-                            continue
-                    elif time_granularity == 'month':
-                        if data["year"] and batch_year != str(data["year"]):
-                            continue
-
-                    location_count = len(batch.location_ids)
-                    if location_count == 0:
-                        time_key = get_time_key(batch.start_time)
-                        summary[branch_id][location_id][time_key]['consumed_qty'] = 0
-                        summary[branch_id][location_id][time_key]['earned_amount'] = 0
-                        continue
-
-                    consumed_qty = batch.consumed_qty / location_count
-                    earned_amount = batch.earned_amount / location_count
-
+                location_count = len(batch.location_ids)
+                if location_count == 0:
                     time_key = get_time_key(batch.start_time)
-                    summary[branch_id][location_id][time_key]['consumed_qty'] += consumed_qty
-                    summary[branch_id][location_id][time_key]['earned_amount'] += earned_amount
+                    summary[branch_id][location_id][time_key]['consumed_qty'] = 0
+                    summary[branch_id][location_id][time_key]['earned_amount'] = 0
+                    continue
+
+                consumed_qty = batch.consumed_qty / location_count
+                earned_amount = batch.earned_amount / location_count
+
+                time_key = get_time_key(batch.start_time)
+                summary[branch_id][location_id][time_key]['consumed_qty'] += consumed_qty
+                summary[branch_id][location_id][time_key]['earned_amount'] += earned_amount
 
         result = []
         time_label = {
@@ -196,9 +217,7 @@ class StoreBatchReport(http.Controller):
 
 
 
-    
 
-    
 
 
     def build_batch_consumption_report(self, *, docids=None, doc_model='store.batch', data):
@@ -220,7 +239,10 @@ class StoreBatchReport(http.Controller):
 
         # Fetch raw data
         raw_data = self.build_nested_summary(time_granularity=time_granularity, data=data)
+        
 
+
+      
         # Determine time keys
         if data['time_dimension'] == 'Month':
             time_keys = MONTH_KEYS
@@ -250,14 +272,8 @@ class StoreBatchReport(http.Controller):
         # Populate quantities
         for item in raw_data:
             loc = item['Location']
-            print("########loc########")
-            print(loc)
             t = item.get(data['time_dimension'])
-            print("########t########")
-            print(t)
             qty = item.get('Consumed Quantity', 0)
-            print("########qty########")
-            print(qty)
             if loc in location_time_map and t in location_time_map[loc]:
                 location_time_map[loc][t] += qty
 
@@ -272,7 +288,7 @@ class StoreBatchReport(http.Controller):
 
         # Chart configuration
         chart_option = {
-            'title': {'text': f'Consumption by Location and {data['time_dimension']}'},
+            'title': {'text': f'الاستهلاك حسب الموقع والوقت'},
             'tooltip': {'trigger': 'axis'},
             'legend': {'data': locations},
             'grid': {
@@ -301,7 +317,5 @@ class StoreBatchReport(http.Controller):
                 'time_keys': time_keys
             }
         }
-
-        
-
-
+    
+    
