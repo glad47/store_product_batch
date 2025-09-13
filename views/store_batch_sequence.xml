@@ -3,8 +3,8 @@
     <record id="seq_store_location_reference" model="ir.sequence">
       <field name="name">Store Location Reference</field>
       <field name="code">store.location.reference</field>
-      <field name="prefix">LOC-</field>
-      <field name="padding">4</field>
+      <field name="prefix">TH-J-</field>
+      <field name="padding">6</field>
       <!-- <field name="number_next">1</field>
       <field name="number_increment">1</field> -->
     </record>

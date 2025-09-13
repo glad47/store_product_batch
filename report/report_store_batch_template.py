@@ -285,7 +285,6 @@ class StoreBatchReport(http.Controller):
                 'type': 'line',
                 'data': [location_time_map[loc][t] for t in time_keys]
             })
-
         # Chart configuration
         chart_option = {
             'title': {'text': f'الاستهلاك حسب الموقع والوقت'},
