@@ -3,18 +3,20 @@ from datetime import datetime
 from odoo.exceptions import ValidationError
 from odoo.tools.translate import _
 import logging
+import re
+
+
 _logger = logging.getLogger(__name__)
 
 class StoreBatch(models.Model):
     _name = 'store.batch'
     _description = 'Store Batch in Store'
     _rec_name = 'name'
-
+# default=lambda self: self.env['ir.sequence'].next_by_code('store.batch.name')
     name = fields.Char(string="Batch Name", 
                         copy=False,
                         index=True,
-                        required=True,
-                        default=lambda self: self.env['ir.sequence'].next_by_code('store.batch.name'))
+                        required=True)
     product_ids = fields.Many2many(
         'product.product',
         'store_batch_product_rel',
@@ -76,11 +78,25 @@ class StoreBatch(models.Model):
 
     
 
+ 
+    @api.onchange('branch_id')
+    def _onchange_batch_name(self):
+        if self.branch_id:
+            count = self.env['store.batch'].search_count([('branch_id', '=', self.branch_id.id)])
+            next_number = str(count + 1).zfill(6)
+            self.name = f"{self.branch_id.batch_prefix}{next_number}"
+
+
+
+
+
+
+
+    
+
     @api.depends('batch_line_ids.consumed_qty', 'batch_line_ids.earned_amount', 'product_ids')
     def _compute_totals(self):
         for batch in self:
-            print("*******************")
-            print(batch.batch_line_ids)
             batch.consumed_qty = sum(batch.batch_line_ids.mapped('consumed_qty'))
             batch.earned_amount = sum(batch.batch_line_ids.mapped('earned_amount'))
 
@@ -160,6 +176,7 @@ class StoreBatch(models.Model):
                                 line_map[key]['qty'] += line.qty
                                 line_map[key]['amount'] += line.price_subtotal
                                 line_map[key]['order_ids'].add(order.id)
+                                batch_line.log_daily_consumption(line.qty, line.price_subtotal)
 
                                 print(
                                     "BatchLine %s matched product %s: +%s qty, +%s amount" % (
@@ -193,30 +210,58 @@ class StoreBatch(models.Model):
         print("Batch consumption tracker completed.")
 
 
-
-
     @api.model
     def create(self, vals):
+        # Generate batch name if not provided
+        if not vals.get('name') and vals.get('branch_id'):
+            branch = self.env['store.branch'].browse(vals['branch_id'])
+            count = self.env['store.batch'].search_count([('branch_id', '=', branch.id)])
+            next_number = str(count + 1).zfill(6)
+            vals['name'] = f"{branch.batch_prefix}{next_number}"
+
+        # Create the batch record
         batch = super().create(vals)
 
+        # Auto-generate batch lines for each product
         product_ids = batch.product_ids
-        # location_ids = batch.location_ids
-
         lines = []
         for product in product_ids:
             lines.append((0, 0, {
-                    'product_id': product.id,
-                    'batch_id': batch.id,
-                    'consumed_qty': 0.0,
-                    'earned_amount': 0.0,
-                    'counted':True,
-                }))
-                
+                'product_id': product.id,
+                'batch_id': batch.id,
+                'consumed_qty': 0.0,
+                'earned_amount': 0.0,
+                'counted': True,
+            }))
 
         if lines:
             batch.write({'batch_line_ids': lines})
 
         return batch
+
+
+    # @api.model
+    # def create(self, vals):
+    #     batch = super().create(vals)
+
+    #     product_ids = batch.product_ids
+    #     # location_ids = batch.location_ids
+          
+    #     lines = []
+    #     for product in product_ids:
+    #         lines.append((0, 0, {
+    #                 'product_id': product.id,
+    #                 'batch_id': batch.id,
+    #                 'consumed_qty': 0.0,
+    #                 'earned_amount': 0.0,
+    #                 'counted':True,
+    #             }))
+                
+
+    #     if lines:
+    #         batch.write({'batch_line_ids': lines})
+
+    #     return batch
 
     # @api.model
     # def create(self, vals):

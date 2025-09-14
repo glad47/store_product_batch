@@ -3,6 +3,7 @@ access_store_location_admin,access.store.location.admin,model_store_location,sto
 access_store_batch_admin,access.store.batch.admin,model_store_batch,store_product_batch.group_store_batch_admin,1,1,1,0
 access_store_branch_admin,access.store.branch.admin,model_store_branch,store_product_batch.group_store_batch_admin,1,1,1,1
 access_store_batch_line_admin,access.store.batch.line.admin,model_store_batch_line,store_product_batch.group_store_batch_admin,1,1,1,1
+access_store_batch_line_daily_user,access.store.batch.line.daily.user,model_store_batch_line_daily,base.group_user,1,1,1,1
 access_store_batch_user,access.store.batch.user,model_store_batch,store_product_batch.group_store_batch_user,1,1,1,0
 access_store_location_user,access.store.location.user,model_store_location,store_product_batch.group_store_batch_user,1,0,0,0
 access_store_branch_user,access.store.branch.user,model_store_branch,store_product_batch.group_store_batch_user,1,0,0,0

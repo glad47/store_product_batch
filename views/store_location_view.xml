@@ -6,6 +6,7 @@
             <form string="Store Location">
                 <sheet>
                     <group>
+                        <field name="branch_id" />
                         <field name="code" attrs="{'readonly': [('id', '!=', False)]}"/>
                     </group>
                     <!-- <group>

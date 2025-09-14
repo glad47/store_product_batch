@@ -12,6 +12,8 @@
                     <group>
                         <field name="pos_ids" widget="many2many_tags" options="{'no_create': True}"/>
                         <field name="location_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="location_prefix" />
+                        <field name="batch_prefix" />
                     </group>
                 </sheet>
             </form>

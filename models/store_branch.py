@@ -12,6 +12,9 @@ class StoreBranch(models.Model):
     active = fields.Boolean(string="Active", default=True)
     pos_ids = fields.One2many('pos.config', 'branch_id', string='POS')
     location_ids = fields.One2many('store.location', 'branch_id', string='Store Locations')
+    location_prefix = fields.Char(string="Location Prefix", default="LOC-", required=True)
+    batch_prefix = fields.Char(string="Batch Prefix", default="BAT-", required=True)
+
 
 
     @api.model

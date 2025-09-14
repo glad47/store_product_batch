@@ -165,33 +165,36 @@ class StoreBatchReport(http.Controller):
             location_id = location.id
 
             for batch in batches:
-                if location not in batch.location_ids or not batch.start_time:
-                    continue
+                for batch_line in batch.batch_line_ids:
+                    for daily in batch_line.daily_log_ids:
 
-                # Filter by year and/or month based on granularity
-                batch_year = str(batch.start_time.year) 
-                batch_month = MONTH_KEYS[batch.start_time.month - 1] 
+                        if location not in batch.location_ids or not batch.start_time:
+                            continue
 
-                if time_granularity == 'day':
-                    if data["year"] and data["month"] and (batch_year != str(data["year"]) or batch_month != data["month"]):
-                        continue
-                elif time_granularity == 'month':
-                    if data["year"] and batch_year != str(data["year"]):
-                        continue
+                        # Filter by year and/or month based on granularity
+                        batch_year = str(daily.date.year) 
+                        batch_month = MONTH_KEYS[daily.date.month - 1] 
 
-                location_count = len(batch.location_ids)
-                if location_count == 0:
-                    time_key = get_time_key(batch.start_time)
-                    summary[branch_id][location_id][time_key]['consumed_qty'] = 0
-                    summary[branch_id][location_id][time_key]['earned_amount'] = 0
-                    continue
+                        if time_granularity == 'day':
+                            if data["year"] and data["month"] and (batch_year != str(data["year"]) or batch_month != data["month"]):
+                                continue
+                        elif time_granularity == 'month':
+                            if data["year"] and batch_year != str(data["year"]):
+                                continue
 
-                consumed_qty = batch.consumed_qty / location_count
-                earned_amount = batch.earned_amount / location_count
+                        location_count = len(batch.location_ids)
+                        if location_count == 0:
+                            time_key = get_time_key(daily.date)
+                            summary[branch_id][location_id][time_key]['consumed_qty'] = 0
+                            summary[branch_id][location_id][time_key]['earned_amount'] = 0
+                            continue
 
-                time_key = get_time_key(batch.start_time)
-                summary[branch_id][location_id][time_key]['consumed_qty'] += consumed_qty
-                summary[branch_id][location_id][time_key]['earned_amount'] += earned_amount
+                        consumed_qty = daily.consumed_qty / location_count
+                        earned_amount = daily.earned_amount / location_count
+
+                        time_key = get_time_key(daily.date)
+                        summary[branch_id][location_id][time_key]['consumed_qty'] += consumed_qty
+                        summary[branch_id][location_id][time_key]['earned_amount'] += earned_amount
 
         result = []
         time_label = {
