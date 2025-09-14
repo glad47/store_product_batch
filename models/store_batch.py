@@ -150,7 +150,7 @@ class StoreBatch(models.Model):
             relevant_orders = self.env['pos.order'].search([
                 ('session_id', 'in', session_ids),
                 ('date_order', '>=', start_time),
-                ('state', '=', 'paid'),
+                ('state', '=', 'invoiced'),
                 ('id', 'not in', batch.processed_order_ids.ids),
             ])
             print("Found %d relevant POS orders for batch %s" % (len(relevant_orders), batch.name))
