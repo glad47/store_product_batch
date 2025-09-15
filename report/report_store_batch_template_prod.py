@@ -333,7 +333,11 @@ class StoreBatchReportProd(http.Controller):
             'xAxis': {
                 'type': 'category',
                 'boundaryGap': True,
-                'data': time_keys
+                'axisLabel': {
+                    'rotate': 45  # or 30, or even 90 if needed
+                },
+                'data': time_keys,
+                
             },
             'yAxis': {'type': 'value'},
             'series': series
@@ -429,8 +433,13 @@ class StoreBatchReportProd(http.Controller):
         # Chart configuration
         chart_option = {
             'title': {'text': 'استهلاك المنتج حسب الموقع'},
-            'tooltip': {'trigger': 'axis'},
-            'legend': {'data': products},
+            'tooltip': {'trigger': 'item'},
+            'legend': {
+                'type': 'scroll',
+                'orient': 'horizontal',
+                'bottom': 0,
+                'data': products
+                },
             'grid': {
                 'left': '3%',
                 'right': '4%',
@@ -451,6 +460,9 @@ class StoreBatchReportProd(http.Controller):
             'xAxis': {
                 'type': 'category',
                 'data': locations,
+                'axisLabel': {
+                    'rotate': 45  # or 30, or even 90 if needed
+                },
                 'name': 'Location'
             },
             'yAxis': {'type': 'value'},
