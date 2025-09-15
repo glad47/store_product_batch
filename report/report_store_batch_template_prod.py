@@ -306,8 +306,13 @@ class StoreBatchReportProd(http.Controller):
         # Chart configuration
         chart_option = {
             'title': {'text': 'Product Consumption by Time and Location'},
-            'tooltip': {'trigger': 'axis'},
-            'legend': {'data': products},
+            'tooltip': {'trigger': 'item'},
+            'legend': {
+                'type': 'scroll',
+                'orient': 'horizontal',
+                'bottom': 0,
+                'data': products
+            },
             'grid': {
                 'left': '3%',
                 'right': '4%',

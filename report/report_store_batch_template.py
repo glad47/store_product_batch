@@ -291,19 +291,32 @@ class StoreBatchReport(http.Controller):
         # Chart configuration
         chart_option = {
             'title': {'text': f'الاستهلاك حسب الموقع والوقت'},
-            'tooltip': {'trigger': 'axis'},
-            'legend': {'data': locations},
+            'tooltip': {'trigger': 'item'},
+            'legend': {
+            'type': 'scroll',
+            'orient': 'horizontal',
+            'bottom': 0,
+            'data': locations
+            },
             'grid': {
-                'left': '3%',
-                'right': '4%',
-                'bottom': '10%',
+                'left': '0%',
+                'right': '0%',
+                'bottom': '5%',
                 'containLabel': True
             },
-            'toolbox': {'feature': {'saveAsImage': {}}},
+            # 'axisLabel': {
+            #     'interval': 0,  # auto-skip based on available space
+            #     'hideOverlap': True
+            # },
+            'toolbox': {'feature': {'saveAsImage': {},  'dataZoom': {
+            'yAxisIndex': 'none'},}, 'restore': {}},
             'xAxis': {
                 'type': 'category',
                 'boundaryGap': False,
-                'data': time_keys
+                'data': time_keys,
+                'axisLabel': {
+                    'rotate': 30  # or 30, or even 90 if needed
+                }
             },
             'yAxis': {'type': 'value'},
             'series': series
